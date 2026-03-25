@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<queue>
 using namespace std;
 
 struct Node{
@@ -9,21 +10,16 @@ struct Node{
     Node*parent;
     Node(int val){
         data=val;
+        left=right=NULL;
+        parent=NULL;
 
-        left=right=parent=NULL;
 
     }
 };
-Node* createNode(int val){
-    Node*temp=new Node(val);
 
-    return temp;
 
-}
-
-Node* findlastleaf(Node*root){
+Node*findPos(Node*root){
     if(!root)return NULL;
-
     queue<Node*>q;
     q.push(root);
     while(!q.empty()){
@@ -31,40 +27,120 @@ Node* findlastleaf(Node*root){
         q.pop();
 
         if(!temp->left || !temp->right)return temp;
-
         q.push(temp->left);
         q.push(temp->right);
 
+      
     }
 
-    return nullptr;
+    return root;
+
 }
-void bubbleUp(Node*newNode){
-        Node*curr=newNode;
-        if(!curr)return ;
-        Node*prev=curr->parent;
 
-        while(prev && prev->parent && prev->data<curr->data){
-            swap(curr->data,prev->data);
-            curr=prev;
-            prev=prev->parent;
+void bubbleUp(Node*curr){
+    if(!curr)return ;
+    Node*prev=curr->parent;
 
-        }
+    while(prev && prev->data<curr->data){
+        swap(prev->data,curr->data);
+
+        curr=prev;
+        prev=prev->parent;
+
+    }
+
 }
 Node*insert(Node*root,int val){
     if(!root)return new Node(val);
 
-
-    Node*p=findlastleaf(root);
+    Node*temp=findPos(root);
     Node*newNode=new Node(val);
-    if(!p->left ){
-        p->left=newNode;
+    newNode->parent=temp;
 
-    }
-    else p->right=newNode;
+    if(!temp->left )
+    temp->left=newNode;
+    else temp->right=newNode;
 
     bubbleUp(newNode);
+
+
     return root;
+
+
+
+}
+Node*rightmostLeafNode(Node*root){
+    if(!root)return NULL;
+    queue<Node*>q;
+    q.push(root);
+    Node*last=NULL;
+
+
+    while(!q.empty()){
+        Node*curr=q.front();
+
+        q.pop();
+        last=curr;
+        if(curr->left){
+            q.push(curr->left);
+
+        }
+        if(curr->right){
+            q.push(curr->right);
+
+        }
+
+
+    }
+
+    return last;
+
+}
+void fix(Node*root){
+    if(!root)return ;
+    Node*curr=root;
+
+    while(curr){
+       Node*largest=curr;
+       if(curr->left && curr->left->data>largest->data){
+        largest=curr->left;
+
+       }
+
+       if(curr->right && curr->right->data>largest->data){
+        largest=curr->right;
+
+       }
+
+       if(largest==curr)break;
+
+       swap(curr->data,largest->data);
+       curr=largest;
+
+
+    }
+}
+void deleteNode(Node*root){
+    if(!root)return ;
+
+    Node*temp=rightmostLeafNode(root);
+   // if only one node
+    if(temp==root){
+            delete root;
+            root=NULL;
+            return;
+
+    }
+    swap(temp->data,root->data);
+
+    Node*p=temp->parent;
+    if(p->left==temp)p->left=NULL;
+    else p->right=NULL;
+
+    fix(root);
+
+
+
 
 }
 
@@ -90,18 +166,40 @@ void print(Node*root){
     }
 
 }
+
+
+
+
+
 int main()
 {
+    ifstream file("input.txt");
 
     Node*root=NULL;
-    ifstream file("input.txt");
     int x;
+
 
     while(file>>x){
         root=insert(root,x);
 
-    }
 
+    }
     print(root);
+    cout<<endl;
+    deleteNode(root);
+    print(root);
+    deleteNode(root);
+    cout<<endl;
+    
+    print(root);
+
+
+
+
+    
+
+
+
+
 return 0;
 }
