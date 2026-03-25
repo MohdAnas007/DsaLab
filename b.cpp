@@ -120,7 +120,7 @@ void fix(Node*root){
 
     }
 }
-void deleteNode(Node*root){
+void deleteNode(Node* &root){
     if(!root)return ;
 
     Node*temp=rightmostLeafNode(root);
@@ -168,7 +168,16 @@ void print(Node*root){
 }
 
 
+void HeapSort(Node* &root,vector<int>&arr){
 
+    while(root){
+        arr.push_back(root->data);
+        deleteNode(root);
+
+    }
+
+
+}
 
 
 int main()
@@ -184,14 +193,10 @@ int main()
 
 
     }
-    print(root);
-    cout<<endl;
-    deleteNode(root);
-    print(root);
-    deleteNode(root);
-    cout<<endl;
-    
-    print(root);
+    vector<int>arr;
+    HeapSort(root,arr);
+    for(int i=0;i<arr.size();i++)cout<<arr[i]<<" ";
+
 
 
 
