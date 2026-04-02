@@ -96,13 +96,20 @@ Node*findrightmostLeaf(Node*root){
     return last;
 
 }
-void HeapSort(Node*root,int *arr,int index){
+void HeapSort(Node*root,int *arr,int &index){
 
     if(!root)return ;
     Node*temp=findrightmostLeaf(root);
     if(root==temp){
-        arr[index]
+        arr[index]=root->data;
+
+        delete root;
+        return;
+
+
     }
+    swap(root->data,temp->data);
+    Node*p=
 
 }
 
