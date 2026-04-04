@@ -1,6 +1,108 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
+template<typename T>
+class Queue{
+    T *arr;
+    int count;
+    int first;
+    int second;
+    int capacity;
+    public:
+    Queue(int size){
+        arr=new T[size];
+
+        capacity=size;
+        count=0;
+        first=0;
+        second=0;
+
+    }
+
+    bool empty(){
+        return count==0;
+
+    }
+    bool full(){
+        return count==capacity;
+
+    }
+
+    void push(T val){
+        if(full()){
+            cout<<"Queue is full"<<endl;
+            return ;
+
+        }
+        count++;
+        arr[second]=val;
+        second=(second+1)%capacity;
+        return ;
+
+
+
+    }
+
+    void pop(){
+
+        if(empty()){
+            cout<<"queue is empty"<<endl;
+            return;
+
+        }
+        first=(first+1)%capacity;
+        count--;
+        return ;
+
+    }
+
+    T front(){
+        if(full()){
+            cout<<"Queue is full"<<endl;
+            return -1;
+
+        }
+        if(empty()){
+            cout<<"Queue is empty"<<endl;
+            return -1;
+
+        }
+
+        return arr[first];
+
+    }
+    ~Queue(){
+        delete[]arr;
+
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 struct Edge{
     int dest;
@@ -41,7 +143,40 @@ class graph{
         array[v].head=newNode2;
         
     }
+    void BFS(int start){
+        bool *visited=new bool[v];
 
+        for(int i=0;i<v;i++)visited[i]=false;
+
+        queue<int>q;
+        q.push(start);
+        visited[start]=true;
+
+
+        while(!q.empty()){
+
+            int currNode=q.front();
+            q.pop();
+            cout<<currNode<<" ";
+
+            Edge*temp=array[currNode].head;
+
+            while(temp){
+                int neighbour=temp->dest;
+
+                if(visited[neighbour]==false){
+                    visited[neighbour]=true;
+                    q.push(neighbour);
+
+                }
+                temp=temp->next;
+
+            }
+
+        }
+        cout<<endl;
+        delete[] visited;
+    }
     void printGraph(){
 
         for(int i=0;i<v;i++){
@@ -58,21 +193,40 @@ class graph{
 
         }
     }
+
+    void dfs(int node,vector<bool>&visited){
+
+        cout<<node<<" ";
+        visited[node]=1;
+
+        Edge*temp=array[node].head;
+        while(temp){
+            if(visited[temp->dest]==0){
+                dfs(temp->dest,visited);
+
+            }
+            temp=temp->next;
+
+        }
+
+    }
 };
 
 
 int main(){
 
-    graph g(5);
-    ifstream file("input.txt");
+   Queue<char>q(5);
+   q.push('f');
+   q.push('g');
+   while(!q.empty()){
+    cout<<q.front()<<endl;
+    q.pop();
+    
+   }
 
-    int x,y;
-    while(file>>x>>y){
-        g.addEdge(x,y);
+    
 
-        
-    }
-    g.printGraph();
+
 
     return 0;
 
