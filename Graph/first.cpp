@@ -76,34 +76,6 @@ class Queue{
 
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 struct Edge{
     int dest;
     Edge*next;
@@ -210,24 +182,42 @@ class graph{
         }
 
     }
+
+    bool detextCycle(int node,vector<bool>&visited,int parent){
+        visited[node]=1;
+
+        Edge*temp=array[node].head;
+        while(temp){
+
+            if(temp->dest==parent){
+                temp=temp->next;
+                continue;
+
+            }
+            if(visited[temp->dest]==1)return 1;
+
+            if(detextCycle(temp->dest,visited,node))return 1;
+
+            temp=temp->next;
+
+
+        }
+        return 0;
+
+    }
 };
 
-
 int main(){
+    graph g(4);
 
-   Queue<char>q(5);
-   q.push('f');
-   q.push('g');
-   while(!q.empty()){
-    cout<<q.front()<<endl;
-    q.pop();
-    
-   }
+    ifstream file("input.txt");
 
-    
-
-
-
+    int x,y;
+    while(file>>x>>y){
+        g.addEdge(x,y);
+                             
+    }
+    g.printGraph();
     return 0;
 
 }
