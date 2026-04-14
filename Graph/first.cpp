@@ -48,6 +48,31 @@ class graph{
         }
     }
 
+    void bfs(int startnode,vector<bool>&visited){
+
+        queue<int>q;
+        q.push(startnode);
+        visited[startnode]=1;
+
+        while(!q.empty()){
+
+            int node=q.front();
+            cout<<node<<" ";
+            q.pop();
+
+
+            for(int i=0;i<v;i++){
+                if(mat[node][i]==1 && !visited[i]){
+                    visited[i]=1;
+                    q.push(i);
+
+                }
+            }
+
+
+        }
+    }
+
     void print(){
 
         for(int i=0;i<v;i++){
@@ -81,7 +106,9 @@ int main(){
 
     for(int i=0;i<7;i++){
         if(!visited[i]){
-            g.dfs(i,visited);
+            g.bfs(i,visited);
+            cout<<" | ";
+
 
         }
     }
