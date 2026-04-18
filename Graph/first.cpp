@@ -100,6 +100,31 @@ class graph{
 
     }
 
+    void list(){
+        unordered_map<int,vector<pair<int,int>>>mp;
+        for(int i=0;i<v;i++){
+             
+             for(int j=0;j<v;j++){
+                 mp[i].push_back(make_pair(j,mat[i][j]));
+                 mp[j].push_back(make_pair(i,mat[i][j]));
+                 
+             }
+         }
+
+         for(int i=0;i<v;i++){
+            cout<<i<<"->";
+
+            for(auto x:mp[i]){
+                int value=x.first;
+                int dest=x.second;
+                cout<<"("<<value<<","<<dest<<")"<<" ";
+
+
+            }
+         }
+
+    }
+
     void dfs(int u,vector<bool>&visited){
 
         visited[u]=1;
@@ -203,7 +228,8 @@ int main(){
         g.addEdge(x,y);
 
      }
-     g.topologicalSort();
+     g.list();
+
     return 0;
 
 }
